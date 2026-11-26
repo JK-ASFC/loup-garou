@@ -23,7 +23,7 @@ Loup-garou · Loup solitaire · Villageois · Voyante · Sorcière · Chasseur �
 Les illustrations des cartes sont **originales** (SVG dessinés pour ce projet, dans `js/roles.js`).
 
 ### Langues
-20 langues (les mêmes que le site LEONE) : français, anglais, espagnol, portugais, italien, allemand, polonais, russe, ukrainien, turc, arabe, hindi, vietnamien, malais, chinois, japonais, coréen, lingala, créole guadeloupéen et martiniquais. La langue choisie sur le site LEONE est reprise automatiquement.
+6 langues : français, anglais, espagnol, portugais, italien et allemand. Si la langue choisie sur le site LEONE en fait partie, elle est reprise automatiquement (sinon : langue du téléphone, puis français).
 
 ## Technique
 

@@ -11,21 +11,7 @@
     { code: "es", name: "Español", locale: "es-ES" },
     { code: "pt", name: "Português", locale: "pt-PT" },
     { code: "it", name: "Italiano", locale: "it-IT" },
-    { code: "de", name: "Deutsch", locale: "de-DE" },
-    { code: "pl", name: "Polski", locale: "pl-PL" },
-    { code: "ru", name: "Русский", locale: "ru-RU" },
-    { code: "uk", name: "Українська", locale: "uk-UA" },
-    { code: "tr", name: "Türkçe", locale: "tr-TR" },
-    { code: "ar", name: "العربية", locale: "ar-SA", dir: "rtl" },
-    { code: "hi", name: "हिन्दी", locale: "hi-IN" },
-    { code: "vi", name: "Tiếng Việt", locale: "vi-VN" },
-    { code: "ms", name: "Bahasa Melayu", locale: "ms-MY" },
-    { code: "zh", name: "中文", locale: "zh-CN" },
-    { code: "ja", name: "日本語", locale: "ja-JP" },
-    { code: "ko", name: "한국어", locale: "ko-KR" },
-    { code: "ln", name: "Lingála", locale: "fr-FR" },
-    { code: "gcf", name: "Kréyòl Gwadloup", locale: "fr-FR" },
-    { code: "gcf-MQ", name: "Kréyòl Matinik", locale: "fr-FR" }
+    { code: "de", name: "Deutsch", locale: "de-DE" }
   ];
 
   const D = window.LG_I18N = window.LG_I18N || {};
