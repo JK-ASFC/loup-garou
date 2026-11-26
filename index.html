@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://dmcqeivddhosfzuttgzb.supabase.co wss://dmcqeivddhosfzuttgzb.supabase.co; manifest-src 'self'">
+  <meta name="referrer" content="no-referrer">
+  <title>Loup Garou</title>
+  <meta name="description" content="Le jeu du Loup Garou en ligne, sur le téléphone de chacun · Résidence LEONE">
+  <meta name="theme-color" content="#0b0a1f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Loup Garou">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-screen="home" data-phase="home">
+  <!-- Décor : ciel, astres, village, forêt, brume -->
+  <div id="scene" aria-hidden="true">
+    <div class="sky sky-night"></div>
+    <div class="sky sky-dusk"></div>
+    <div class="sky sky-dawn"></div>
+    <div class="sky sky-day"></div>
+    <div class="stars"></div>
+    <div class="stars stars2"></div>
+    <div class="shooting"></div>
+    <div class="astre moon"><i></i><i></i><i></i></div>
+    <div class="astre sun"></div>
+    <div class="clouds"><i></i><i></i><i></i></div>
+    <svg class="land far" viewBox="0 0 400 120" preserveAspectRatio="none"><path d="M0,70 C40,40 70,60 110,45 C150,30 180,55 220,40 C260,25 300,50 340,35 C370,25 390,40 400,38 L400,120 L0,120 Z"/></svg>
+    <svg class="land village" viewBox="0 0 400 120" preserveAspectRatio="xMidYMax slice">
+      <g class="houses">
+        <path d="M60,120 L60,78 L80,62 L100,78 L100,120 Z"/>
+        <path d="M100,120 L100,86 L116,74 L132,86 L132,120 Z"/>
+        <path d="M150,120 L150,60 L160,60 L160,40 L166,28 L172,40 L172,60 L182,60 L182,120 Z"/>
+        <path d="M196,120 L196,82 L214,66 L232,82 L232,120 Z"/>
+        <path d="M240,120 L240,90 L256,78 L272,90 L272,120 Z"/>
+        <path d="M290,120 L290,74 L310,58 L330,74 L330,120 Z"/>
+      </g>
+      <g class="windows">
+        <rect x="70" y="86" width="6" height="7"/><rect x="85" y="96" width="6" height="7"/><rect x="112" y="94" width="5" height="6"/>
+        <rect x="163" y="66" width="6" height="9"/><rect x="208" y="90" width="6" height="7"/><rect x="252" y="98" width="5" height="6"/>
+        <rect x="302" y="82" width="6" height="7"/><rect x="316" y="96" width="6" height="7"/>
+      </g>
+    </svg>
+    <svg class="land forest" viewBox="0 0 400 100" preserveAspectRatio="xMidYMax slice">
+      <path d="M0,100 L0,70 L10,40 L20,70 L18,70 L30,30 L42,70 L40,70 L52,50 L64,80 L80,45 L96,85 L110,60 L124,90 L340,90 L350,55 L362,85 L372,35 L386,75 L392,50 L400,70 L400,100 Z"/>
+    </svg>
+    <div class="eyes"><i></i><i></i></div>
+    <div class="fog"></div>
+    <div class="fog fog2"></div>
+    <div class="fireflies"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+
+  <header id="topbar" class="topbar"></header>
+  <main id="view" class="view"></main>
+  <div id="overlays"></div>
+  <div id="fx" aria-hidden="true"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p style="color:#fff;text-align:center;padding:2rem">Active JavaScript pour jouer.</p></noscript>
+
+  <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/roles.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/qr.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
