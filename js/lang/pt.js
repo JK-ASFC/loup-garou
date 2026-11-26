@@ -26,6 +26,7 @@ window.LG_I18N.pt = {
   "err.nowolf": "É preciso pelo menos um lobo!", "err.name": "Escolhe primeiro o teu nome 🙂",
   "err.config": "O servidor do jogo não está configurado.", "err.net": "Sem ligação. Verifica a tua rede.",
   "err.code": "O código tem 4 letras.", "err.notFound": "Nenhum jogo encontrado com o código {code}.",
+    "err.crypto": "Este navegador é demasiado antigo para jogar em segurança. Atualiza-o (ou usa Chrome, Safari ou Firefox recentes).",
   "chat.title": "Conversa", "chat.chan.wolves": "Alcateia", "chat.chan.dead": "Cemitério", "chat.empty": "Ainda sem mensagens. Começa a conversa!",
   "chat.ph": "Escreve uma mensagem…", "chat.phWolves": "Sussurra à alcateia…", "chat.phDead": "Fala com os fantasmas…",
   "chat.send": "Enviar", "chat.sleeping": "Chiu… a aldeia dorme.",

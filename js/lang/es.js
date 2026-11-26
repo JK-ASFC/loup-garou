@@ -26,6 +26,7 @@ window.LG_I18N.es = {
   "err.nowolf": "¡Hace falta al menos un lobo!", "err.name": "Primero elige tu nombre 🙂",
   "err.config": "El servidor del juego no está configurado.", "err.net": "No se puede conectar. Revisa tu red.",
   "err.code": "El código tiene 4 letras.", "err.notFound": "No hay ninguna partida con el código {code}.",
+    "err.crypto": "Este navegador es demasiado antiguo para jugar de forma segura. Actualízalo (o usa Chrome, Safari o Firefox recientes).",
   "chat.title": "Chat", "chat.chan.wolves": "Manada", "chat.chan.dead": "Cementerio", "chat.empty": "Aún no hay mensajes. ¡Rompe el hielo!",
   "chat.ph": "Escribe un mensaje…", "chat.phWolves": "Susurra a la manada…", "chat.phDead": "Habla con los fantasmas…",
   "chat.send": "Enviar", "chat.sleeping": "Shhh… el pueblo duerme.",

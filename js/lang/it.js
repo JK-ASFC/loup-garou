@@ -26,6 +26,7 @@ window.LG_I18N.it = {
   "err.nowolf": "Serve almeno un lupo!", "err.name": "Prima scegli il tuo nome 🙂",
   "err.config": "Il server di gioco non è configurato.", "err.net": "Connessione impossibile. Controlla la rete.",
   "err.code": "Il codice ha 4 lettere.", "err.notFound": "Nessuna partita trovata con il codice {code}.",
+    "err.crypto": "Questo browser è troppo vecchio per giocare in sicurezza. Aggiornalo (o usa Chrome, Safari o Firefox recenti).",
   "chat.title": "Chat", "chat.chan.wolves": "Branco", "chat.chan.dead": "Cimitero", "chat.empty": "Ancora nessun messaggio. Rompi il ghiaccio!",
   "chat.ph": "Scrivi un messaggio…", "chat.phWolves": "Sussurra al branco…", "chat.phDead": "Parla ai fantasmi…",
   "chat.send": "Invia", "chat.sleeping": "Ssst… il villaggio dorme.",

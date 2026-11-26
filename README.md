@@ -30,6 +30,7 @@ Les illustrations des cartes sont **originales** (SVG dessinés pour ce projet, 
 - Site **statique** (GitHub Pages), HTML/CSS/JS sans framework ni dépendance.
 - Temps réel : **Supabase Realtime** (projet « leone ») en WebSocket, sans SDK. Aucune table : la partie vit sur le téléphone de l'hôte, qui fait autorité et diffuse l'état.
 - Les infos secrètes (rôle, actions de nuit, chat de la meute) sont **chiffrées de bout en bout** entre chaque joueur et l'hôte (ECDH P-256 + AES-GCM) : impossible de lire les rôles des autres en espionnant le réseau.
+- Messages de l'hôte **signés** (ECDSA), actions anonymes de taille fixe et messages-leurres la nuit : voir [SECURITE.md](SECURITE.md).
 - Sons et ambiances **synthétisés** en Web Audio (vent, grillons, chouette, hurlements, cloche, battements de cœur…) — aucun fichier audio.
 - Vibrations : API Vibration (Android). Sur iPhone, Safari ne vibre pas : la voix du conteur appelle les rôles.
 - L'écran reste allumé pendant la partie (Wake Lock). Recharger la page reconnecte automatiquement, y compris l'hôte (état sauvegardé).
@@ -49,6 +50,7 @@ Les illustrations des cartes sont **originales** (SVG dessinés pour ce projet, 
 ```bash
 node test/simulate.js 500   # 500 parties aléatoires de 3 à 20 joueurs
 node test/i18n-check.js     # toutes les clés de traduction présentes
+node test/security.js       # 26 contrôles de sécurité du moteur
 ```
 
 Pour essayer à plusieurs sur un seul ordinateur, ouvre plusieurs onglets avec `?profil=a`, `?profil=b`… (un joueur différent par onglet).

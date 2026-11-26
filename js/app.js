@@ -3,6 +3,10 @@
    ============================================================= */
 (function () {
   "use strict";
+  // Anti-clickjacking : le jeu refuse d'être affiché dans le cadre d'un autre site
+  if (window.top !== window.self) {
+    try { window.top.location.replace(window.self.location.href); } catch (e) { document.documentElement.innerHTML = ""; return; }
+  }
   const LG = window.LG, A = window.LGAudio, I = window.LGI18n;
   const t = (k, p) => I.t(k, p);
   const cfg = window.LG_CONFIG || {};
@@ -964,10 +968,18 @@
   document.addEventListener("visibilitychange", () => { if (!document.hidden && ui.screen === "game") keepAwake(true); });
 
   /* ---------- Connexion ---------- */
-  function joinLink(code) { return location.origin + location.pathname + "?c=" + code; }
+  // Le lien d'invitation contient l'empreinte de la clé de l'hôte (k) :
+  // un faux hôte ne peut pas se substituer au vrai pour qui arrive par le lien.
+  const URLK = (() => { const q = new URLSearchParams(location.search); const k = q.get("k") || ""; return /^[\w-]{12}$/.test(k) ? { code: (q.get("c") || "").toUpperCase(), k } : null; })();
+  function joinLink(code) {
+    const fp = ui.sess && ui.sess.fingerprint();
+    return location.origin + location.pathname + "?c=" + code + (fp ? "&k=" + fp : "");
+  }
   function urlFor(code) {
     const q = new URLSearchParams();
     if (code) q.set("c", code);
+    const fp = code && ui.sess && ui.sess.fingerprint();
+    if (fp) q.set("k", fp);
     if (PROFILE) q.set("profil", PROFILE);
     const s = q.toString();
     return location.pathname + (s ? "?" + s : "");
@@ -994,6 +1006,7 @@
   async function createGame() {
     if (!readProfile()) return;
     if (!window.LGNet.configured) return toast(t("err.config"));
+    if (!window.LGNet.hasCrypto) return toast(t("err.crypto"));
     A.unlock();
     ui.joining = true; toast(t("conn.creating"));
     const s = newSession();
@@ -1011,6 +1024,7 @@
     if (code.length !== 4) return toast(t("err.code"));
     if (!readProfile()) return;
     if (!window.LGNet.configured) return toast(t("err.config"));
+    if (!window.LGNet.hasCrypto) return toast(t("err.crypto"));
     A.unlock();
     const s = newSession();
     if (s.canResume(code)) {
@@ -1021,7 +1035,7 @@
     }
     toast(t("conn.joining"));
     ui.screen = "lobby"; render();
-    const ok = await s.joinGame(code);
+    const ok = await s.joinGame(code, URLK && URLK.code === code ? URLK.k : null);
     if (!ok) {
       s.leave(); ui.sess = null; ui.screen = "home"; ui.prefill = code;
       try { sessionStorage.removeItem("lg.active"); } catch (e) { /* ignore */ }

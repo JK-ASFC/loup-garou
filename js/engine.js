@@ -81,8 +81,14 @@
 
   /* ---------- Utilitaires ---------- */
   const clampInt = (v, a, b, d) => { v = Math.round(Number(v)); return Number.isFinite(v) ? Math.min(b, Math.max(a, v)) : d; };
-  const cleanText = (s, max) => String(s == null ? "" : s).replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
-  const EMOJI_OK = (e) => typeof e === "string" && e.length > 0 && e.length <= 16 && !/[<>&"']/.test(e);
+  // Texte nettoyé : sans caractères de contrôle, ni caractères invisibles ou
+  // d'inversion de sens (qui permettraient d'usurper un nom à l'affichage)
+  const cleanText = (s, max) => String(s == null ? "" : s)
+    .replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁠-⁩﻿]/g, " ")
+    .replace(/\s+/g, " ").trim().slice(0, max);
+  const EMOJI_OK = (e) => typeof e === "string" && e.length > 0 && e.length <= 8 && !/[<>&"'\\\w\s]/.test(e);
+  const REACTS = ["❤️", "😂", "😮", "😢", "😡", "👍", "🐺", "🔥"];
+  const ID_RE = /^[\w-]{1,40}$/; // identifiants sans caractère HTML
 
   /* =============================================================
      Moteur
@@ -109,7 +115,7 @@
   /* ---------- Joueurs & salle d'attente ---------- */
   P.join = function (info) {
     const S = this.S;
-    if (!info || !info.id || S.kicked.includes(info.id)) return false;
+    if (!info || typeof info.id !== "string" || !ID_RE.test(info.id) || S.kicked.includes(info.id)) return false;
     const name = cleanText(info.name, 18) || "?";
     const av = EMOJI_OK(info.av) ? info.av : "🙂";
     const col = /^#[0-9a-f]{6}$/i.test(info.col || "") ? info.col : "#c8a24a";
@@ -156,7 +162,7 @@
     const S = this.S, g = S.g;
     if (!g || S.phase === "end") return "all";
     if (pid === S.settings.narrator) return "all";
-    if (!(pid in g.roles)) return "dead";           // spectateur
+    if (!(pid in g.roles)) return null;             // spectateur : lecture seule
     if (!g.alive[pid]) return "dead";
     if (S.phase === "night") return isWolf(g.roles[pid]) ? "wolves" : null;
     return "all";
@@ -167,7 +173,7 @@
     if (!g) return false;
     if (pid === S.settings.narrator || S.phase === "end") return true;
     if (c === "wolves") return pid in g.roles && isWolf(g.roles[pid]);
-    if (c === "dead") return !(pid in g.roles) || !g.alive[pid];
+    if (c === "dead") return pid in g.roles && !g.alive[pid]; // pas les spectateurs (anti-triche)
     return false;
   };
 
@@ -218,7 +224,7 @@
 
   P.onReact = function (pid, a) {
     const m = this.S.chat.find((x) => x.id === a.id);
-    if (!m || !EMOJI_OK(a.e) || !this.canSee(pid, m.c)) return;
+    if (!m || !REACTS.includes(a.e) || !this.canSee(pid, m.c) || !this.chatChannelFor(pid)) return;
     const list = m.r[a.e] || (m.r[a.e] = []);
     const i = list.indexOf(pid);
     if (i >= 0) list.splice(i, 1); else list.push(pid);
@@ -929,7 +935,7 @@
     if (end) out.g.log = g.log;
     const step = g.step;
     if (step) {
-      const ps = { t: step.t, sub: step.sub, id: step.id, ends: step.ends, total: 0, done: 0 };
+      const ps = { t: step.t, sub: step.sub, id: step.id, ends: step.ends };
       if (step.t === "fake") { ps.t = step.data.role; ps.fake = true; } // personne ne doit savoir que le rôle est mort
       // La nuit, on ne publie pas le nombre d'acteurs : cela trahirait les rôles morts
       if (!NIGHT_STEPS.has(step.t) && step.t !== "fake") {
@@ -965,7 +971,7 @@
     const S = this.S, g = S.g;
     const out = { chat: [], toast: S.toasts[pid] || null };
     if (!g) return out;
-    out.chat = this.chatFor(pid).filter((m) => m.c !== "all");
+    out.chat = this.chatFor(pid).filter((m) => m.c !== "all").slice(-30);
     out.chan = this.chatChannelFor(pid);
     out.buzz = g.buzz[pid] || null;
     if (pid === S.settings.narrator) {

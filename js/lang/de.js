@@ -26,6 +26,7 @@ window.LG_I18N.de = {
   "err.nowolf": "Es braucht mindestens einen Wolf!", "err.name": "Wähle zuerst deinen Namen 🙂",
   "err.config": "Der Spielserver ist nicht eingerichtet.", "err.net": "Keine Verbindung. Prüfe dein Netz.",
   "err.code": "Der Code hat 4 Buchstaben.", "err.notFound": "Kein Spiel mit dem Code {code} gefunden.",
+    "err.crypto": "Dieser Browser ist zu alt, um sicher zu spielen. Bitte aktualisiere ihn (oder nutze ein aktuelles Chrome, Safari oder Firefox).",
   "chat.title": "Chat", "chat.chan.wolves": "Rudel", "chat.chan.dead": "Friedhof", "chat.empty": "Noch keine Nachrichten. Sag Hallo!",
   "chat.ph": "Nachricht schreiben…", "chat.phWolves": "Dem Rudel zuflüstern…", "chat.phDead": "Mit den Geistern reden…",
   "chat.send": "Senden", "chat.sleeping": "Psst… das Dorf schläft.",

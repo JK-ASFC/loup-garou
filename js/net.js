@@ -120,7 +120,9 @@
 
   /* ---------- Chiffrement ---------- */
   const subtle = window.crypto && window.crypto.subtle;
-  const KS = "lg.keys";
+  // ?profil=xxx (tests à plusieurs sur un appareil) : des clés distinctes par profil
+  const PROFILE = (new URLSearchParams(location.search).get("profil") || "").replace(/[^\w-]/g, "").slice(0, 12);
+  const KS = "lg.keys" + (PROFILE ? "." + PROFILE : "");
   const b64 = (buf) => { const a = new Uint8Array(buf); let s = ""; for (let i = 0; i < a.length; i += 0x8000) s += String.fromCharCode.apply(null, a.subarray(i, i + 0x8000)); return btoa(s); };
   const unb64 = (s) => { const b = atob(s), a = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; };
   const enc = new TextEncoder(), dec = new TextDecoder();
@@ -172,6 +174,64 @@
     return JSON.parse(dec.decode(pt));
   }
 
-  window.LGNet = { Realtime, post, keys, shared, seal, open, configured: !!(BASE && KEY) };
+  /* ---------- Signature de l'hôte (ECDSA P-256) ----------
+     Chaque message de l'hôte est signé : un joueur ne peut pas se faire
+     passer pour l'hôte en diffusant un faux état de partie. */
+  const SK = "lg.sign" + (PROFILE ? "." + PROFILE : "");
+  let signKeys = null;
+  const ECDSA = { name: "ECDSA", namedCurve: "P-256" };
+  const SIG = { name: "ECDSA", hash: "SHA-256" };
+  async function hostSigner() {
+    if (signKeys) return signKeys;
+    if (!subtle) throw new Error("NO_CRYPTO");
+    try {
+      const s = JSON.parse(localStorage.getItem(SK) || "null");
+      if (s && s.pub && s.priv) {
+        signKeys = { pub: s.pub, priv: await subtle.importKey("jwk", s.priv, ECDSA, false, ["sign"]) };
+        return signKeys;
+      }
+    } catch (e) { /* régénère */ }
+    const kp = await subtle.generateKey(ECDSA, true, ["sign", "verify"]);
+    const pub = await subtle.exportKey("jwk", kp.publicKey);
+    const priv = await subtle.exportKey("jwk", kp.privateKey);
+    const slim = { kty: pub.kty, crv: pub.crv, x: pub.x, y: pub.y };
+    try { localStorage.setItem(SK, JSON.stringify({ pub: slim, priv })); } catch (e) { /* ignore */ }
+    signKeys = { pub: slim, priv: kp.privateKey };
+    return signKeys;
+  }
+  async function sign(text) {
+    const k = await hostSigner();
+    return b64(await subtle.sign(SIG, k.priv, enc.encode(text)));
+  }
+  const verifiers = {};
+  async function verify(pub, text, sig) {
+    if (!subtle || !pub || typeof sig !== "string") return false;
+    try {
+      const id = pub.x + pub.y;
+      if (!verifiers[id]) verifiers[id] = await subtle.importKey("jwk", { kty: "EC", crv: "P-256", x: pub.x, y: pub.y, ext: true }, ECDSA, false, ["verify"]);
+      return await subtle.verify(SIG, verifiers[id], unb64(sig), enc.encode(text));
+    } catch (e) { return false; }
+  }
+  // Empreinte courte d'une clé publique (mise dans le lien d'invitation)
+  async function fingerprint(pub) {
+    const h = new Uint8Array(await subtle.digest("SHA-256", enc.encode(pub.x + "." + pub.y)));
+    return b64(h).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "").slice(0, 12);
+  }
+  // Vérifie qu'une clé publique reçue a bien la forme attendue
+  const validPub = (k) => !!(k && typeof k === "object" && k.kty === "EC" && k.crv === "P-256" &&
+    /^[A-Za-z0-9_-]{43}$/.test(k.x || "") && /^[A-Za-z0-9_-]{43}$/.test(k.y || ""));
+  // Remplissage : tous les messages chiffrés d'un même envoi ont la même taille
+  const pad = (obj, size) => {
+    const s = JSON.stringify(obj);
+    const target = Math.max(size || 0, Math.ceil((s.length + 8) / 256) * 256);
+    return Object.assign({}, obj, { _: "~".repeat(Math.max(0, target - s.length - 7)) });
+  };
+  // Essaie de déchiffrer avec une clé ; null si ce n'est pas la bonne
+  async function tryOpen(key, box) {
+    if (!key || !box || box.p != null) return null;
+    try { return await open(key, box); } catch (e) { return null; }
+  }
+
+  window.LGNet = { Realtime, post, keys, shared, seal, open, tryOpen, sign, verify, fingerprint, hostSigner, validPub, pad, hasCrypto: !!subtle, configured: !!(BASE && KEY) };
   window.LGNet.debug = false;
 })();

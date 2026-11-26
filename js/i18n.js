@@ -45,6 +45,7 @@
     "err.nowolf": "Il faut au moins un loup !", "err.name": "Choisis d'abord ton nom 🙂",
     "err.config": "Le serveur de jeu n'est pas configuré.", "err.net": "Connexion impossible. Vérifie ton réseau.",
     "err.code": "Le code fait 4 lettres.", "err.notFound": "Aucune partie trouvée avec le code {code}.",
+    "err.crypto": "Ce navigateur est trop ancien pour jouer en sécurité. Mets-le à jour (ou utilise Chrome, Safari ou Firefox récent).",
 
     "chat.title": "Discussion", "chat.chan.wolves": "Meute", "chat.chan.dead": "Cimetière", "chat.empty": "Pas encore de message. Lance la conversation !",
     "chat.ph": "Écris un message…", "chat.phWolves": "Chuchote à la meute…", "chat.phDead": "Parle aux fantômes…",
@@ -208,6 +209,7 @@
     "err.nowolf": "You need at least one wolf!", "err.name": "Pick your name first 🙂",
     "err.config": "The game server is not configured.", "err.net": "Can't connect. Check your network.",
     "err.code": "The code has 4 letters.", "err.notFound": "No game found with code {code}.",
+    "err.crypto": "This browser is too old to play securely. Please update it (or use a recent Chrome, Safari or Firefox).",
     "chat.title": "Chat", "chat.chan.wolves": "Pack", "chat.chan.dead": "Graveyard", "chat.empty": "No messages yet. Say hi!",
     "chat.ph": "Write a message…", "chat.phWolves": "Whisper to the pack…", "chat.phDead": "Talk to the ghosts…",
     "chat.send": "Send", "chat.sleeping": "Shh… the village is asleep.",
